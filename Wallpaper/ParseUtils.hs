@@ -1,4 +1,4 @@
-module Wallpaper.Utils (
+module Wallpaper.ParseUtils (
     countFilesR
     ) where
 

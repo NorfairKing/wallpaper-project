@@ -7,7 +7,6 @@ import           System.IO                       (writeFile)
 import           System.Process                  (callCommand)
 import           Text.Blaze.Html.Renderer.Pretty (renderHtml)
 import           Text.Blaze.Html5                (Html (..))
-import           Wallpaper.Utils
 
 
 

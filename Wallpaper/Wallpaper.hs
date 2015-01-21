@@ -11,8 +11,8 @@ import           Text.Blaze.Html5                (Html (..))
 
 
 data Config d = Config {
-      generator :: d -> Html
-    , parser    :: IO d
+      viewer :: d -> Html
+    , parser :: IO d
     }
 
 wallpaperFileName :: String
@@ -42,7 +42,7 @@ wallpaper c = do
 
     -- generate html
     dat <- parser c
-    let html = renderHtml $ (generator c) dat
+    let html = renderHtml $ (viewer c) dat
     writeFile wallpaperHtmlFile html
 
     -- Generate wallpaper

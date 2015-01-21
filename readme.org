@@ -1,4 +1,21 @@
-dependencies
+* The wallpaper project
 
-- haskell (TODO version)
+** Dependencies
+- Haskell (duh)
 - wkhtmltopdf
+- feh
+
+** Installation
+
+#+BEGIN_EXAMPLE
+cabal install
+#+END_EXAMPLE
+
+** Getting started
+
+- Create the basic files
+#+BEGIN_EXAMPLE
+./setup.sh
+#+END_EXAMPLE
+
+- Implement your own wallpaper project

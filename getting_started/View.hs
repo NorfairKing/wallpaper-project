@@ -20,5 +20,5 @@ view m = H.html $ do
         H.pre "ln -s ~/.wpp/wallpaper.bin /usr/bin"
         H.p $ "To change the data you use, edit " >>  H.pre "Model.hs"
         H.p $ "To change what data is parsed, edit " >>  H.pre "Parser.hs"
-        H.p $ "To change what is redered, edit " >>  H.pre "View.hs"
+        H.p $ "To change what is rendered, edit " >>  H.pre "View.hs"
 

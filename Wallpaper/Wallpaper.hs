@@ -5,6 +5,7 @@ module Wallpaper.Wallpaper (
 
 import           System.FilePath.Posix           ((<.>), (</>))
 import           System.IO                       (writeFile)
+import           System.Posix.Env                (setEnv)
 import           System.Process                  (callCommand)
 import           Text.Blaze.Html.Renderer.Pretty (renderHtml)
 
@@ -58,6 +59,9 @@ putUpWallpaper png = call putCmd
 
 wallpaper :: Config a -> IO ()
 wallpaper c = do
+
+    -- Set the screen to display the wallpaper on
+    setEnv "DISPLAY" ":0" False
 
     -- generate html
     dat <- parser c

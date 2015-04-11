@@ -3,34 +3,53 @@ module Wallpaper.Wallpaper (
         , wallpaper
     ) where
 
+import           System.FilePath.Posix           ((<.>), (</>))
 import           System.IO                       (writeFile)
 import           System.Process                  (callCommand)
 import           Text.Blaze.Html.Renderer.Pretty (renderHtml)
+
 import           Text.Blaze.Html5                (Html (..))
 
 
-
 data Config d = Config {
-      viewer :: d -> Html
-    , parser :: IO d
+      viewer  :: d -> Html
+    , parser  :: IO d
+    , rootDir :: FilePath
     }
 
 wallpaperFileName :: String
 wallpaperFileName = "wallpaper"
 
+call :: String -> IO ()
+call cmd = do
+    putStrLn cmd
+    callCommand cmd
+
 generateImage :: FilePath -> FilePath -> IO ()
-generateImage html png = callCommand generateCmd
+generateImage html png = call generateCmd
     where
-        generateCmd = unwords $ generateBin :generateFlags ++ [generateInputHtml, generateOutputPng]
+        generateCmd = unwords $ fakeXServerBin:fakeXServerArgs ++ generateBin:generateFlags ++ generateArgs
+        fakeXServerBin = "xvfb-run"
+        fakeXServerArgs = [
+                                "--auto-servernum"
+                            ,   "--server-args=" ++ show fakeXServerScreen
+                          ]
+        fakeXServerScreen = "-screen 0, " ++ width ++ "x" ++ height ++ "x16"
         generateBin = "wkhtmltoimage"
-        generateFlags = ["--width", width, "--height", height]
+        generateFlags = [
+                            "--format", "png"
+                        ,   "--width" , width
+                        ,   "--height", height
+                        ,   "--quality", show 100
+                        ]
+        generateArgs = [generateInputHtml, generateOutputPng]
         generateInputHtml = html
         generateOutputPng = png
         width = "1920"
         height = "1080"
 
 putUpWallpaper :: FilePath -> IO ()
-putUpWallpaper png = callCommand putCmd
+putUpWallpaper png = call putCmd
     where
         putCmd = unwords $ putBin: putFlags
         putBin = "feh"
@@ -52,6 +71,7 @@ wallpaper c = do
     putUpWallpaper wallpaperPngFile
 
     where
-        wallpaperHtmlFile = wallpaperFileName ++ ".html"
-        wallpaperPngFile  = wallpaperFileName ++ ".png"
+        wallpaperHtmlFile = root </> wallpaperFileName <.> "html"
+        wallpaperPngFile  = root </> wallpaperFileName <.> "png"
+        root = rootDir c
 
